@@ -1,0 +1,11 @@
+{
+	"Sentinels_addresses_list":[
+		"[fe80::d726:449e:f556:2ee5]:26379"
+	],
+	"Databases":[
+		{
+			"Name":"db0",
+			"Local_port":"6382"
+		}
+	]
+}

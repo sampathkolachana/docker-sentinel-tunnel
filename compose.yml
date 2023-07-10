@@ -1,0 +1,40 @@
+services:
+    redis-proxy:
+        image: ambient/sentinel-tunnel:c14247
+        container_name: portal-redis-proxy
+        network_mode: host
+        volumes:
+            - ./config.json:/etc/sentinel_tunnel/config.json
+    redis-sentinel:
+        image: 'ambient/redis-sentinel:7.0.9-debian-11-r2-ipv6-4851e0'
+        container_name: portal-redis-sentinel
+        environment:
+            - REDIS_MASTER_HOST=localhost
+            - REDIS_SENTINEL_DOWN_AFTER_MILLISECONDS=10000
+            - REDIS_SENTINEL_FAILOVER_TIMEOUT=20000
+            - REDIS_SENTINEL_QUORUM=2
+        network_mode: host
+        restart: always
+        logging:
+            options:
+                max-size: "10m"
+                max-file: "5"
+    ipv6:
+        image: robbertkl/ipv6nat
+        restart: unless-stopped
+        network_mode: "host"
+        privileged: true
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock:ro
+            - /lib/modules:/lib/modules:ro
+
+networks:
+    default:
+        enable_ipv6: true
+        driver: bridge
+        driver_opts:
+            com.docker.network.enable_ipv6: "true"
+        ipam:
+            driver: default
+            config:
+                - subnet: fd00::/80

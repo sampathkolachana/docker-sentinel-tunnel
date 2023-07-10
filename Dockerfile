@@ -1,5 +1,5 @@
 FROM golang:1.12 AS builder
-RUN go get github.com/RedisLabs/sentinel_tunnel
+RUN go get github.com/sampathkolachana/sentinel_tunnel
 
 FROM ubuntu:18.04
 COPY --from=builder /go/bin/sentinel_tunnel /usr/local/bin/
